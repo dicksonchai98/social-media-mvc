@@ -35,6 +35,7 @@ builder.Services.AddApplicationServices();
 var app = builder.Build();
 
 app.UseExceptionHandler("/Home/Error");
+app.UseStatusCodePagesWithReExecute("/Home/StatusCode", "?code={0}");
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
@@ -51,6 +52,7 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
+    DatabaseScriptRunner.RunDevelopmentScripts(db, app.Environment.ContentRootPath);
 }
 
 app.MapStaticAssets();
