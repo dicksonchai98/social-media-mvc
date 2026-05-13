@@ -26,8 +26,8 @@
 ## ä¸‹è?å°ˆæ?
 
 ```bash
-git clone https://github.com/dicksonchai98/trading-monitoring-dashboard.git
-cd trading-monitoring-dashboard
+git clone https://github.com/dicksonchai98/social-media-mvc.git
+cd social-media-mvc
 ```
 
 ## ?Ÿå??¹å?ï¼ˆå»ºè­°ä½¿??Dockerï¼?
