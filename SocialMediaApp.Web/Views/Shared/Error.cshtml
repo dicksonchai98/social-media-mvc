@@ -20,10 +20,10 @@
         }
 
         <div class="d-flex gap-2">
-            <a class="btn btn-primary" asp-controller="Posts" asp-action="Index">回到首頁</a>
+            <a class="btn btn-primary" asp-controller="Posts" asp-action="Index">Back to Home</a>
             @if (User.Identity?.IsAuthenticated != true)
             {
-                <a class="btn btn-outline-secondary" asp-controller="Account" asp-action="Login">前往登入</a>
+                <a class="btn btn-outline-secondary" asp-controller="Account" asp-action="Login">Go to Login</a>
             }
         </div>
     </div>

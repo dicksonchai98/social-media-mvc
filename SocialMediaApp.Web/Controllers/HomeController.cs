@@ -39,11 +39,11 @@ public class HomeController : Controller
 
         (model.Title, model.Message) = code switch
         {
-            400 => ("請求格式錯誤", "請確認輸入內容後再試一次。"),
-            401 => ("尚未登入", "請先登入後再存取此功能。"),
-            403 => ("沒有權限", "您沒有權限存取這個資源。"),
-            404 => ("找不到頁面", "您要找的頁面不存在或已被移除。"),
-            _ => ("系統忙碌中", "系統處理您的請求時發生錯誤，請稍後再試。")
+            400 => ("Bad request", "Please verify your input and try again."),
+            401 => ("Unauthorized", "Please sign in before accessing this feature."),
+            403 => ("Forbidden", "You do not have permission to access this resource."),
+            404 => ("Page not found", "The page you requested does not exist or has been removed."),
+            _ => ("Service unavailable", "An error occurred while processing your request. Please try again later.")
         };
 
         return model;

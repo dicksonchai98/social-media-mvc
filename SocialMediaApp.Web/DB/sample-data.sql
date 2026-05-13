@@ -29,17 +29,17 @@ IF @SeedUserId IS NOT NULL
 AND NOT EXISTS (
     SELECT 1
     FROM Posts
-    WHERE UserId = @SeedUserId AND Content = N'我是貼文' AND IsDeleted = 0
+    WHERE UserId = @SeedUserId AND Content = N'Seed post' AND IsDeleted = 0
 )
 BEGIN
     INSERT INTO Posts (UserId, Content, Image, CreatedAt, IsDeleted)
-    VALUES (@SeedUserId, N'我是貼文', NULL, SYSUTCDATETIME(), 0);
+    VALUES (@SeedUserId, N'Seed post', NULL, SYSUTCDATETIME(), 0);
 END;
 
 DECLARE @SeedPostId INT = (
     SELECT TOP 1 PostId
     FROM Posts
-    WHERE UserId = @SeedUserId AND Content = N'我是貼文' AND IsDeleted = 0
+    WHERE UserId = @SeedUserId AND Content = N'Seed post' AND IsDeleted = 0
     ORDER BY PostId DESC
 );
 
@@ -48,9 +48,9 @@ AND @SeedPostId IS NOT NULL
 AND NOT EXISTS (
     SELECT 1
     FROM Comments
-    WHERE UserId = @SeedUserId AND PostId = @SeedPostId AND Content = N'我是留言' AND IsDeleted = 0
+    WHERE UserId = @SeedUserId AND PostId = @SeedPostId AND Content = N'Seed comment' AND IsDeleted = 0
 )
 BEGIN
     INSERT INTO Comments (UserId, PostId, Content, CreatedAt, IsDeleted)
-    VALUES (@SeedUserId, @SeedPostId, N'我是留言', SYSUTCDATETIME(), 0);
+    VALUES (@SeedUserId, @SeedPostId, N'Seed comment', SYSUTCDATETIME(), 0);
 END;

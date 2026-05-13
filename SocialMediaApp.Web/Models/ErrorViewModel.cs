@@ -4,8 +4,8 @@ public class ErrorViewModel
 {
     public string? RequestId { get; set; }
     public int? StatusCode { get; set; }
-    public string Title { get; set; } = "發生錯誤";
-    public string Message { get; set; } = "系統處理您的請求時發生錯誤，請稍後再試。";
+    public string Title { get; set; } = "An error occurred";
+    public string Message { get; set; } = "An error occurred while processing your request. Please try again later.";
 
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }
