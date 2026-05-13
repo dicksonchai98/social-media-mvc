@@ -8,7 +8,7 @@ BEGIN
     VALUES (1, N'Welcome to SocialMediaApp!', NULL, SYSUTCDATETIME(), 0);
 END;
 
-IF EXISTS (SELECT 1 FROM Posts WHERE Id = 1)
+IF EXISTS (SELECT 1 FROM Posts WHERE PostId = 1)
 AND NOT EXISTS (
     SELECT 1
     FROM Comments
@@ -20,7 +20,7 @@ BEGIN
 END;
 
 DECLARE @SeedUserId INT = (
-    SELECT TOP 1 Id
+    SELECT TOP 1 UserId
     FROM Users
     WHERE Email = 'seeduser@example.com'
 );
@@ -37,10 +37,10 @@ BEGIN
 END;
 
 DECLARE @SeedPostId INT = (
-    SELECT TOP 1 Id
+    SELECT TOP 1 PostId
     FROM Posts
     WHERE UserId = @SeedUserId AND Content = N'我是貼文' AND IsDeleted = 0
-    ORDER BY Id DESC
+    ORDER BY PostId DESC
 );
 
 IF @SeedUserId IS NOT NULL

@@ -8,7 +8,26 @@
         <h2 class="mb-4">Create Account</h2>
         <form asp-action="Register" method="post">
             @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                var summaryErrors = ViewData.ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .Where(m => !string.IsNullOrWhiteSpace(m))
+                    .Distinct()
+                    .ToList();
+
+                if (summaryErrors.Count > 0)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <div class="fw-semibold mb-1">註冊失敗，請檢查以下內容：</div>
+                        @foreach (var err in summaryErrors)
+                        {
+                            <div>@err</div>
+                        }
+                    </div>
+                }
+            }
             <div class="mb-3">
                 <label asp-for="PhoneNumber" class="form-label"></label>
                 <input asp-for="PhoneNumber" class="form-control" />

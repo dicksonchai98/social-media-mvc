@@ -16,7 +16,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__DefaultConnection: Server=db;Database=SocialMediaDb;User Id=sa;Password=<REDACTED_SECRET>;TrustServerCertificate=True;
+      ConnectionStrings__DefaultConnection: Server=db;Database=SocialMediaDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;
     depends_on:
       db:
         condition: service_healthy
@@ -32,13 +32,13 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "<REDACTED_SECRET>"
+      SA_PASSWORD: "${DB_PASSWORD}"
     ports:
       - "1433:1433"
     volumes:
       - db_data:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '<REDACTED_SECRET>' -Q 'SELECT 1' -C"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '' -Q 'SELECT 1' -C"]
       interval: 10s
       timeout: 5s
       retries: 20
@@ -55,11 +55,10 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - >
-        /opt/mssql-tools/bin/sqlcmd -S db -U sa -P "<REDACTED_SECRET>" -d SocialMediaDb -i /db/stored-procedures.sql
+        /opt/mssql-tools/bin/sqlcmd -S db -U sa -P "${DB_PASSWORD}" -d SocialMediaDb -i /db/stored-procedures.sql
     restart: "no"
 
 volumes:
   db_data:
   app_keys:
-
 
