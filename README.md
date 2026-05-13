@@ -25,43 +25,51 @@
 目前系統可用且符合題目需求，但若往真實社群平台規模發展，建議以下優化：
 
 1. 架構優化：由 SSR 漸進式走向前後端分離
+
 - 現況：ASP.NET Core MVC Server-Side Rendering。
 - 限制：高互動場景（即時通知、局部刷新、動態載入）開發與維護成本較高。
 - 優化：抽離 API 層，前端改為獨立應用（SPA），先從讀取型頁面開始逐步改造，避免一次重寫風險。
 
 2. 驗證機制優化：由 Cookie-based 擴展為 Token-based（JWT/OAuth2）
+
 - 現況：使用 Cookie Authentication，適合單體 MVC。
 - 限制：在分散式/多服務架構下，跨服務授權、跨網域存取、行動端整合與水平擴展較不易。
 - 優化：導入 JWT + Refresh Token（或整合 OAuth2/OIDC），讓 Web、App、第三方服務共用統一授權模型。
 
 3. 即時能力優化：支援 WebSocket/SignalR
+
 - 現況：頁面刷新後才看到最新資料。
 - 限制：社群互動延遲，使用者體驗不佳。
 - 優化：新增即時推送（新貼文、留言、通知），減少輪詢成本。
 
 4. 資料存取優化：逐步統一存取策略
+
 - 現況：建立資料使用 Stored Procedure；查詢/更新部分使用 EF Core。
 - 限制：資料存取風格混用，後續維運與效能調校成本較高。
 - 優化：依情境明確分層（例如 Command 走 SP、Query 走 EF/Dapper），並建立一致的查詢規範與索引策略。
 
 5. 可擴展性優化：快取與非同步化
+
 - 現況：主要依賴同步資料庫讀寫。
 - 限制：熱門貼文與高流量時 DB 壓力上升。
 - 優化：加入 Redis 快取（熱門 feed、使用者摘要），並以佇列處理非同步工作（通知、稽核、統計）。
 
 6. 可觀測性優化：監控、追蹤、告警
+
 - 現況：有基本錯誤頁與 Request ID。
 - 限制：跨服務問題定位困難。
 - 優化：導入集中式 log、metrics、distributed tracing，並設定告警門檻（錯誤率、延遲、DB 連線）。
 
 7. 安全性優化：強化生產環境安全基線
+
 - 現況：具備 Anti-Forgery、輸入驗證、參數化查詢。
 - 限制：秘密資訊目前仍有明文配置樣例。
 - 優化：改用 Secret Manager / Vault / `.env` 注入敏感資訊，補上 CSP、Rate Limit、登入風險控制（IP/裝置維度）。
 
-## 實作題需求對照（依「【新進.Net】玉山銀行軟體工程師實作題 I」）
+## 實作題需求對照
 
 1. 註冊功能（以手機號碼註冊與登入）
+
 - 你怎麼做：
   - 註冊頁面：`/Account/Register`
   - 登入頁面：`/Account/Login`（以 `PhoneNumber + Password` 驗證）
@@ -72,6 +80,7 @@
   - Repository（SP 呼叫）：[UserRepository.cs](C:\Users\dickson\Desktop\social-media-mvc\SocialMediaApp.Web\Repositories\UserRepository.cs)
 
 2. 登入驗證（只有登入者可發文或留言）
+
 - 你怎麼做：
   - 使用 ASP.NET Core Cookie Authentication。
   - 需要保護的動作都加上 `[Authorize]`。
@@ -82,6 +91,7 @@
   - 留言控制器授權：[CommentsController.cs](C:\Users\dickson\Desktop\social-media-mvc\SocialMediaApp.Web\Controllers\CommentsController.cs)
 
 3. 發文功能（新增、列出、編輯、刪除）
+
 - 你怎麼做：
   - 新增發文：`sp_Post_Create`
   - 列出所有發文：Feed 查詢（依時間倒序，排除已刪除）
@@ -93,6 +103,7 @@
   - Repository：[PostRepository.cs](C:\Users\dickson\Desktop\social-media-mvc\SocialMediaApp.Web\Repositories\PostRepository.cs)
 
 4. 留言功能（針對發文新增留言）
+
 - 你怎麼做：
   - 登入者可對貼文新增留言（`sp_Comment_Create`）。
   - 列表頁一次載入多篇貼文留言，減少查詢次數。
@@ -102,6 +113,7 @@
   - Repository：[CommentRepository.cs](C:\Users\dickson\Desktop\social-media-mvc\SocialMediaApp.Web\Repositories\CommentRepository.cs)
 
 5. 系統架構要求（C# / ASP.NET 10+ MVC、三層式）
+
 - 你怎麼做：
   - C# + ASP.NET Core MVC (.NET 10)。
   - 三層式：Nginx（Web Server）+ ASP.NET App（Application Server）+ SQL Server（RDBMS）。
@@ -115,9 +127,10 @@
   - 容器架構：[docker-compose.yml](C:\Users\dickson\Desktop\social-media-mvc\docker-compose.yml)
 
 6. 技術要求對照
+
 - 使用 Bootstrap 支援 RWD
   - 做法：Layout 引入 Bootstrap CSS/JS，頁面採 Bootstrap 元件與格線。
-  - 位置：[Views/Shared/_Layout.cshtml](C:\Users\dickson\Desktop\social-media-mvc\SocialMediaApp.Web\Views\Shared\_Layout.cshtml)
+  - 位置：[Views/Shared/\_Layout.cshtml](C:\Users\dickson\Desktop\social-media-mvc\SocialMediaApp.Web\Views\Shared_Layout.cshtml)
 - 透過 Stored Procedure 存取資料庫
   - 做法：使用 `sp_User_*`、`sp_Post_Create`、`sp_Comment_Create`。
   - 位置：[stored-procedures.sql](C:\Users\dickson\Desktop\social-media-mvc\SocialMediaApp.Web\DB\stored-procedures.sql)
@@ -136,6 +149,7 @@
     - 輸入驗證：[ViewModels](C:\Users\dickson\Desktop\social-media-mvc\SocialMediaApp.Web\ViewModels)
 
 7. 密碼安全（題目要求加鹽雜湊）
+
 - 你怎麼做：
   - 使用 `PasswordHasher<User>` 實作雜湊與驗證（含 salt 機制，不儲存明碼）。
 - 實作位置：
